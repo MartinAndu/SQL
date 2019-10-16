@@ -1,0 +1,97 @@
+1er Recup 1C 2019
+
+CREATE TABLE reserva_natural (
+ id_reserva INT NOT NULL,
+ nombre varchar(30),
+ ubicacion varchar(30),
+ año_creacion varchar(30),
+ tamaño int,
+ capacidad int
+);
+
+CREATE TABLE balance (
+ id_reserva INT NOT NULL,
+ año varchar(4),
+ mes varchar(2),
+ ingreso_neto decimal,
+ gastos int,
+ subsidios int
+);
+
+CREATE TABLE animal_en_reserva (
+ id_reserva int not null,
+ nombre_cientifico varchar(20),
+ cantidad_ejemplares int not null
+);
+
+CREATE TABLE animal(
+ nombre_cientifico varchar(20),
+ nombre_comun varchar(20),
+ familia varchar(20),
+ genero varchar(20),
+ especie varchar(20)
+);
+
+INSERT INTO reserva_natural VALUES
+(1, 'Res A', 'Olivos', 2018, 500, 10),
+(2, 'Res B', 'Olivos', 2019, 600, 200),
+(3, 'Res C', 'Olivos', 2000, 700, 3000),
+(4, 'Res D', 'Olivos', 2010, 800, 40000),
+(5, 'Res E', 'Olivos', 2015, 900, 500000);
+
+INSERT INTO balance VALUES
+(1, 2019, 5, 30000, 20540, 400),
+(2, 2019, 5, 3000, 20760, 100),
+(3, 2019, 5, 300, 20650, 10),
+(4, 2019, 5, 70000, 200, 4050),
+(5, 2019, 5, 80000, 2020, 4070);
+
+INSERT INTO animal_en_reserva VALUES
+(1, 'A', 20),
+(2, 'B', 40),
+(3, 'C', 90),
+(4, 'D',80),
+(5, 'E', 30),
+(1, 'F', 20),
+(2, 'G', 40),
+(3, 'H', 90),
+(4, 'I',80),
+(5, 'J', 30),
+(5, 'K', 30),
+(5, 'L', 60),
+(5, 'M', 80),
+(1, 'D', 20),
+(2, 'D', 40),
+(3, 'D', 90),
+(4, 'D',80),
+(5, 'D', 30),
+(1, 'M', 20),
+(2, 'M', 40),
+(3, 'M', 90),
+(4, 'M',80),
+(5, 'M', 30);
+
+INSERT INTO animal VALUES
+('A', 'A', 'Ursidae', 'M', 'Mamifero'),
+('B', 'B', 'Otros', 'M', 'Mamifero'),
+('C', 'C', 'Otros', 'M', 'Mamifero'),
+('D', 'D','Ursidae', 'M', 'Mamifero'),
+('E', 'E', 'Otros', 'M', 'Mamifero'),
+('F', 'F', 'Otros', 'M', 'Mamifero'),
+('G', 'G', 'Ursidae', 'M', 'Mamifero'),
+('H', 'H', 'Ursidae', 'F', 'Mamifero'),
+('I', 'I','Otros', 'F', 'Mamifero'),
+('J', 'J', 'Otros', 'F', 'Mamifero'),
+('K', 'K', 'Otros', 'F', 'Mamifero'),
+('L', 'L', 'Ursidae', 'F', 'Mamifero'),
+('M', 'M', 'Ursidae', 'F', 'Mamifero');
+
+select a.nombre_cientifico,a.nombre_comun from animal a
+where a.familia='Ursidae' AND EXISTS 
+(select * from animal_en_reserva ar inner join reserva_natural res
+ using(id_reserva) inner join animal a2 using(nombre_cientifico) 
+ where a2.nombre_cientifico = a.nombre_cientifico
+ having count(distinct ar.id_reserva) = (select count(*) from reserva_natural)
+)
+
+
